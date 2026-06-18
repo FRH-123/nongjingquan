@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Header from "./Header";
 import MetricCard from "./MetricCard";
 import Panel from "./Panel";
 import FilterPanel from "./FilterPanel";
-import MapPanel from "./MapPanel";
 import SurveyPieChart from "./SurveyPieChart";
 import AuditTable from "./AuditTable";
 import SurveyBarChart from "./SurveyBarChart";
@@ -14,6 +14,11 @@ import TrendChart from "./TrendChart";
 import VillageDetailModal from "./VillageDetailModal";
 import { FilterProvider } from "@/hooks/useFilter";
 import { useOverview, useLandUsage } from "@/hooks/useIndicators";
+
+const MapPanel = dynamic(() => import("./MapPanel"), {
+  ssr: false,
+  loading: () => <div className="h-full flex items-center justify-center text-text-muted">地图加载中...</div>,
+});
 
 // 大屏主布局组件
 function DashboardContent() {
