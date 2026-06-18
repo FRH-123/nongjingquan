@@ -3,18 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-interface LoginFormProps {
-  redirectPath?: string;
-}
-
-export default function LoginForm({ redirectPath = '/dashboard' }: LoginFormProps) {
+export default function LoginForm() {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-
-  const canSubmit = !isLoading && username.length > 0 && password.length > 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +28,7 @@ export default function LoginForm({ redirectPath = '/dashboard' }: LoginFormProp
 
       if (response.ok && data.success) {
         document.cookie = `auth_token=${data.token}; path=/; max-age=86400`;
-        router.push(redirectPath);
+        router.push('/dashboard');
       } else {
         setError(data.message || '登录失败');
       }
@@ -45,6 +39,8 @@ export default function LoginForm({ redirectPath = '/dashboard' }: LoginFormProp
     }
   };
 
+  const isButtonDisabled = isLoading || !username || !password;
+
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-[320px]">
       <div className="mb-4">
@@ -54,17 +50,20 @@ export default function LoginForm({ redirectPath = '/dashboard' }: LoginFormProp
         <input
           type="text"
           value={username}
-          onChange={(e) => {
-            console.log('username:', e.target.value);
-            setUsername(e.target.value);
-          }}
-          placeholder="请输入用户名"
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="admin"
           disabled={isLoading}
           className="w-full px-3 py-2.5 rounded-md text-[13px] outline-none transition-all duration-200"
           style={{
             background: 'var(--bg-input)',
             border: '1px solid var(--border-card)',
             color: 'var(--text-primary)',
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = 'var(--accent-cyan)';
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = 'var(--border-card)';
           }}
         />
       </div>
@@ -76,17 +75,20 @@ export default function LoginForm({ redirectPath = '/dashboard' }: LoginFormProp
         <input
           type="password"
           value={password}
-          onChange={(e) => {
-            console.log('password:', e.target.value);
-            setPassword(e.target.value);
-          }}
-          placeholder="请输入密码"
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="admin"
           disabled={isLoading}
           className="w-full px-3 py-2.5 rounded-md text-[13px] outline-none transition-all duration-200"
           style={{
             background: 'var(--bg-input)',
             border: '1px solid var(--border-card)',
             color: 'var(--text-primary)',
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = 'var(--accent-cyan)';
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = 'var(--border-card)';
           }}
         />
       </div>
@@ -101,19 +103,15 @@ export default function LoginForm({ redirectPath = '/dashboard' }: LoginFormProp
         </div>
       )}
 
-      <div className="mb-4 text-xs text-gray-500">
-        Debug: canSubmit={canSubmit}, username={username}, password={password}
-      </div>
-
       <button
         type="submit"
-        disabled={!canSubmit}
+        disabled={isButtonDisabled}
         className="w-full py-3 rounded-md text-[14px] font-semibold tracking-[1px] transition-all duration-200"
         style={{
-          background: canSubmit ? 'var(--gradient-cyan)' : 'rgba(32, 80, 160, 0.35)',
+          background: isButtonDisabled ? 'rgba(32, 80, 160, 0.35)' : 'linear-gradient(90deg, #0066cc, #00d4ff)',
           color: '#fff',
-          cursor: canSubmit ? 'pointer' : 'not-allowed',
-          opacity: canSubmit ? 1 : 0.7,
+          cursor: isButtonDisabled ? 'not-allowed' : 'pointer',
+          opacity: isButtonDisabled ? 0.7 : 1,
         }}
       >
         {isLoading ? '登录中...' : '登 录'}
