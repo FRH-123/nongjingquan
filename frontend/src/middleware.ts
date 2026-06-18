@@ -7,10 +7,10 @@ import type { NextRequest } from 'next/server';
  */
 
 // 需要认证保护的路由
-const protectedRoutes = ['/dashboard', '/import'];
+const protectedRoutes = ['/', '/dashboard', '/import'];
 
 // 公开路由（不需要认证）
-const publicRoutes = ['/login', '/', '/api'];
+const publicRoutes = ['/login', '/api'];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
