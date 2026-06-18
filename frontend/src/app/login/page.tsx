@@ -1,22 +1,20 @@
 "use client";
 
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import LoginForm from '@/components/auth/LoginForm';
 
-export default function LoginPage() {
+function LoginContent() {
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get('redirect') || '/dashboard';
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* 深色背景 */}
-      <div 
+      <div
         className="absolute inset-0"
         style={{ background: 'var(--bg-primary)' }}
       />
-
-      {/* 氛围光效 */}
-      <div 
+      <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background: `
@@ -26,9 +24,7 @@ export default function LoginPage() {
           `,
         }}
       />
-
-      {/* 登录卡片 */}
-      <div 
+      <div
         className="relative w-[400px] rounded-lg p-8"
         style={{
           background: 'var(--bg-card)',
@@ -36,33 +32,37 @@ export default function LoginPage() {
           boxShadow: 'var(--shadow-card)',
         }}
       >
-        {/* 标题 */}
         <div className="text-center mb-8">
-          <h1 
+          <h1
             className="text-[20px] font-bold tracking-[4px] mb-2"
             style={{ color: 'var(--text-primary)' }}
           >
             农经权二轮延包可视化平台
           </h1>
-          <div 
+          <div
             className="w-[60%] h-[1px] mx-auto"
             style={{ background: 'var(--gradient-header-line)' }}
           />
         </div>
-
-        {/* 登录表单 */}
         <LoginForm redirectPath={redirectPath} />
-
-        {/* 底部提示 */}
         <div className="mt-6 text-center">
-          <p 
-            className="text-[11px]"
-            style={{ color: 'var(--text-muted)' }}
-          >
+          <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
             默认账号: admin / admin
           </p>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
+        <p style={{ color: 'var(--text-muted)' }}>加载中...</p>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
