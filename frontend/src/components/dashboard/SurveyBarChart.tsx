@@ -23,12 +23,6 @@ interface SurveyBarChartProps {
   onVillageClick?: (code: string, name: string) => void;
 }
 
-// ECharts 点击参数类型
-interface EChartsClickParam {
-  componentType: string;
-  value: string;
-}
-
 export default function SurveyBarChart({ onVillageClick }: SurveyBarChartProps) {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstance = useRef<echarts.ECharts | null>(null);
@@ -165,9 +159,10 @@ export default function SurveyBarChart({ onVillageClick }: SurveyBarChartProps) 
     
     // 点击事件处理
     if (onVillageClick) {
-      chartInstance.current.on("click", (params: EChartsClickParam) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      chartInstance.current.on("click", (params: any) => {
         if (params.componentType === "xAxis") {
-          const index = params.value ? villageNames.indexOf(params.value) : -1;
+          const index = params.value ? villageNames.indexOf(String(params.value)) : -1;
           if (index >= 0 && villageCodes[index]) {
             onVillageClick(villageCodes[index], villageNames[index]);
           }

@@ -19,12 +19,6 @@ interface TrendChartProps {
   className?: string;
 }
 
-// ECharts 参数类型
-interface EChartsTooltipParam {
-  axisValue: string;
-  value: number;
-}
-
 export default function TrendChart({ className = "" }: TrendChartProps) {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstance = useRef<echarts.ECharts | null>(null);
@@ -104,8 +98,9 @@ export default function TrendChart({ className = "" }: TrendChartProps) {
           color: "#e8f0ff",
           fontSize: 12,
         },
-        formatter: (params: EChartsTooltipParam[]) => {
-          const point = params[0];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        formatter: (params: any) => {
+          const point = Array.isArray(params) ? params[0] : params;
           return `${point.axisValue}<br/>${metricName}: <strong style="color:#00d4ff">${point.value}</strong>`;
         },
       },

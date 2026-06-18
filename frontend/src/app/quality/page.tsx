@@ -37,6 +37,7 @@ export default function QualityPage() {
   const [errors, setErrors] = useState<QualityErrorListResponse | null>(null);
   const [errorType, setErrorType] = useState<string>("");
   const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 获取质量统计
   useEffect(() => {
@@ -63,10 +64,12 @@ export default function QualityPage() {
     let active = true;
     
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const response = await fetchApi<QualityErrorListResponse>(api.qualityErrors(errorType, page, 10));
         if (active) {
           setErrors(response);
+          setIsLoading(false);
         }
       } catch {
         // 使用模拟数据
@@ -96,6 +99,7 @@ export default function QualityPage() {
             page: 1,
             size: 10,
           });
+          setIsLoading(false);
         }
       }
     };

@@ -39,6 +39,7 @@ export default function TrendPage() {
   const [baseId, setBaseId] = useState<number | null>(null);
   const [compareId, setCompareId] = useState<number | null>(null);
   const [comparison, setComparison] = useState<ComparisonResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 获取快照列表
   useEffect(() => {
@@ -68,10 +69,12 @@ export default function TrendPage() {
     let active = true;
     
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const response = await fetchApi<ComparisonResponse>(api.snapshotCompare(baseId, compareId));
         if (active) {
           setComparison(response);
+          setIsLoading(false);
         }
       } catch {
         // 使用模拟数据
@@ -89,6 +92,7 @@ export default function TrendPage() {
               { metric_name: "已完成户数", base_value: 15, compare_value: 26, change: 11, change_percent: 73.33 },
             ],
           });
+          setIsLoading(false);
         }
       }
     };

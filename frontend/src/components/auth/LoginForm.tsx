@@ -32,7 +32,7 @@ export default function LoginForm() {
       } else {
         setError(data.message || '登录失败');
       }
-    } catch (err) {
+    } catch {
       setError('网络错误，请检查连接');
     } finally {
       setIsLoading(false);
