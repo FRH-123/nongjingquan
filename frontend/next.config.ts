@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  allowedDevOrigins: [
+    '*.trae.cn',
+    '*.agent-sandbox-bj-d1-gw.trae.cn',
+  ],
 };
 
 export default nextConfig;
